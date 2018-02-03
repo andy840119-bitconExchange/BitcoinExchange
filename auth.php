@@ -11,8 +11,8 @@ $CSS_Stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.css">
 $ip = $_SERVER['REMOTE_ADDR'];
 $date = date("n/j/Y g:i a");;
 
-$db_handle = mysql_connect($dbdb_host,$dbdb_user,$dbdb_pass)or die("Server error.");
-$db_found = mysql_select_db($dbdb_database)or die("Server error.");
+$db_handle = mysqli_connect($dbdb_host,$dbdb_user,$dbdb_pass)or die("Server error.");
+$db_found = mysqli_select_db($dbdb_database)or die("Server error.");
 
 $coin_selected = $_SESSION['trade_coin'];
 if(!$coin_selected) {
@@ -60,20 +60,20 @@ if(!$user_session) {
    $Bytecoind_Account_Address = $Bytecoind->getaccountaddress($wallet_id);
    $Chncoind_Account_Address = $Chncoind->getaccountaddress($wallet_id);
    $SQL = "SELECT * FROM balances WHERE username='$user_session'";
-   $result = mysql_query($SQL);
-   $num_rows = mysql_num_rows($result);
+   $result = mysqli_query($SQL);
+   $num_rows = mysqli_num_rows($result);
    if($num_rows!=1) {
-      if(!mysql_query("INSERT INTO balances (id,username,coin1,coin2,coin3,coin4,coin5,coin6,coin7,coin8,coin9,coin10) VALUES ('','$user_session','0','0','0','0','0','0','0','0','0','0')")) {
+      if(!mysqli_query("INSERT INTO balances (id,username,coin1,coin2,coin3,coin4,coin5,coin6,coin7,coin8,coin9,coin10) VALUES ('','$user_session','0','0','0','0','0','0','0','0','0','0')")) {
          die("Server error");
       } else {
          $r_system_action = "success";
       }
    }
    $SQL = "SELECT * FROM addresses WHERE username='$user_session'";
-   $result = mysql_query($SQL);
-   $num_rows = mysql_num_rows($result);
+   $result = mysqli_query($SQL);
+   $num_rows = mysqli_num_rows($result);
    if($num_rows!=1) {
-      if(!mysql_query("INSERT INTO addresses (id,username,coin1,coin2,coin3,coin4,coin5,coin6,coin7,coin8,coin9,coin10) VALUES ('','$user_session','$Bitcoind_Account_Address','$Bytecoind_Account_Address','$Chncoind_Account_Address','0','0','0','0','0','0','0')")) {
+	   if(!mysqli_query("INSERT INTO addresses (id,username,coin1,coin2,coin3,coin4,coin5,coin6,coin7,coin8,coin9,coin10) VALUES ('','$user_session','$Bitcoind_Account_Address','$Bytecoind_Account_Address','$Chncoind_Account_Address','0','0','0','0','0','0','0')")) {
          die("Server error");
       } else {
          $r_system_action = "success";
@@ -93,10 +93,10 @@ if(!$user_session) {
             $DEPOSIT_amount = abs($Bitcoind_List_Transaction['amount']);
             $DEPOSIT_txid = $Bitcoind_List_Transaction['txid'];
             $SQL = "SELECT * FROM transactions WHERE coin='$DEPOSIT_coin_type' and txid='$DEPOSIT_txid'";
-            $result = mysql_query($SQL);
-            $num_rows = mysql_num_rows($result);
+            $result = mysqli_query($SQL);
+            $num_rows = mysqli_num_rows($result);
             if($num_rows!=1) {
-               if(!mysql_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
+				if(!mysqli_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
                   die("Server error");
                } else {
                   $result = plusfunds($user_session,"BTC",$DEPOSIT_amount);
@@ -121,10 +121,10 @@ if(!$user_session) {
             $DEPOSIT_amount = abs($Bytecoind_List_Transaction['amount']);
             $DEPOSIT_txid = $Bytecoind_List_Transaction['txid'];
             $SQL = "SELECT * FROM transactions WHERE coin='$DEPOSIT_coin_type' and txid='$DEPOSIT_txid'";
-            $result = mysql_query($SQL);
-            $num_rows = mysql_num_rows($result);
+            $result = mysqli_query($SQL);
+            $num_rows = mysqli_num_rows($result);
             if($num_rows!=1) {
-               if(!mysql_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
+				if(!mysqli_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
                   die("Server error");
                } else {
                   $result = plusfunds($user_session,"BTE",$DEPOSIT_amount);
@@ -149,10 +149,10 @@ if(!$user_session) {
             $DEPOSIT_amount = abs($Chncoind_List_Transaction['amount']);
             $DEPOSIT_txid = $Chncoind_List_Transaction['txid'];
             $SQL = "SELECT * FROM transactions WHERE coin='$DEPOSIT_coin_type' and txid='$DEPOSIT_txid'";
-            $result = mysql_query($SQL);
-            $num_rows = mysql_num_rows($result);
+            $result = mysqli_query($SQL);
+            $num_rows = mysqli_num_rows($result);
             if($num_rows!=1) {
-               if(!mysql_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
+				if(!mysqli_query("INSERT INTO transactions (id,date,username,action,coin,address,txid,amount) VALUES ('','$DEPOSIT_date','$user_session','$DEPOSIT_tx_type','$DEPOSIT_coin_type','$DEPOSIT_address','$DEPOSIT_txid','$DEPOSIT_amount')")) {
                   die("Server error");
                } else {
                   $result = plusfunds($user_session,"LTC",$DEPOSIT_amount);
